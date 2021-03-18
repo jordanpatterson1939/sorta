@@ -12,7 +12,7 @@ $ pip install sorta
 <br>
 
 ### Usage
-**Basic(Organizes your Desktop, Documents and Download directories)**
+**Basic (Organizes your Desktop, Documents and Download directories)**
 ```bash
 $ sorta
 ```
@@ -25,7 +25,7 @@ Enter directory:
 ```
 <br>
 
-**Allow sorta to run at intervals(note that in order to run Sorta in the background, you'll have to run a daemon command or your system's equivalent with Sorta along with the specified arguments(see below) as the process). Here is an example of running Sorta indefinitely, allowing it to clean up your directories periodically every 15 minutes.**
+**Allow sorta to run at intervals (note that in order to run Sorta in the background, you'll have to run a daemon command or your system's equivalent with Sorta along with the specified arguments(see below) as the process). Here is an example of running Sorta indefinitely, allowing it to clean up your directories periodically every 15 minutes.**
 ```bash
 $ sorta -b -i 15
 ```
