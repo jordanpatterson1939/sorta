@@ -117,7 +117,7 @@ def main():
     
     parser = argparse.ArgumentParser()
     parser.add_argument("-b","--background",help="Runs sorta indefinitely",action="store_true")
-    parser.add_argument("-d","--directory",help="Cleanup a single directory",action="store_true")
+    parser.add_argument("-d","--directory",help="Run sorta on a single directory",action="store_true")
     parser.add_argument("-i","--interval",type=int,help="how frequently you want sorta to cleanup your folders, in minutes")
    
     args = parser.parse_args()
