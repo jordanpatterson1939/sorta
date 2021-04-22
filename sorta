@@ -4,6 +4,7 @@
 import os
 import re
 import time
+import json
 import shutil
 import argparse
 
@@ -11,6 +12,100 @@ home = os.path.expanduser('~')
 downloads = os.path.join(home,'Downloads')
 documents = os.path.join(home,'Documents')
 desktop = os.path.join(home,'Desktop')
+
+class Category:
+    def __init__(self,name,keywords=[]):
+        self.name = name
+        self.keywords = keywords
+
+    def add_keyword(self,keyword):
+        if keyword not in self.keywords:
+            self.keywords.append(keyword)
+
+    def dict(self):
+        return self.__dict__
+
+    def match(self,filename):
+        #returns bool indicating whether or not a keyword is present in filename
+        pass
+
+    def haskeyword(self,keyword):
+        return keyword in self.keywords
+    
+    def save(self):
+        home_dir = os.path.expanduser('~')
+        filename = 'categories.json'
+        path = os.path.join(home_dir,filename)
+        with open(path,'r') as inp:
+            cats = json.load(inp)
+        cats[self.name] = self.dict()
+        saveCategories(cats)
+
+    def addfile(self,filename,parent_dir):
+        pass
+
+def loadCategory(name):
+    if not categoryExists(name):
+        print("Attempt to retrieve category has failed. ERROR: Category does not exist. Aborting...")
+        exit(1)
+    home_dir = os.path.expanduser('~')
+    filename = 'categories.json'
+    path = os.path.join(home_dir,filename)
+    with open(path,'r') as inp:
+        cat = json.load(inp)[name]
+    obj = Category(cat['name'],cat['keywords'])
+    return obj
+
+def categoryExists(name):
+    home_dir = os.path.expanduser('~')
+    filename = 'categories.json'
+    path = os.path.join(home_dir,filename)
+    with open(path,'r') as inp:
+        cats = json.load(inp)
+    return name in cats
+    
+
+def loadCategories():
+    home_dir = os.path.expanduser('~')
+    filename = 'categories.json'
+    try:
+        path = os.path.join(home_dir,filename)
+        if not os.path.exists(path):
+            print("No categories were added. Try using -c to add a category so you can start grouping related files.")
+            exit(1)
+        with open(path,'r') as inp:
+            cats = json.load(inp)
+        categories = []
+        for c in cats:
+            cat = Category(cats[c]['name'],cats[c]['keywords'])
+            categories.append(cat)
+        return categories
+    except Exeception as e:
+        print(e)
+
+def saveCategories(categories):
+    home_dir = os.path.expanduser('~')
+    filename = 'categories.json'
+    try:
+        category_dict = {}
+        #handle each case; list, dict or single category object
+        if type(categories) is list:
+            for c in categories:
+                category_dict[c.name] = c.dict()
+            obj = {"categories":category_dict}
+        elif type(categories) is dict:
+            category_dict = categories
+        elif type(categories) is Category:
+            category_dict[categories.name] = categories.dict()
+            
+        jsonstr = json.dumps(category_dict, indent = 4)
+        path = os.path.join(home_dir,filename)
+        with open(path,'w') as out:
+            out.write(jsonstr)
+            
+    except Exception as e:
+        print(e)
+    
 
 class FileType:
     def __init__(self,folder,regex):
@@ -162,4 +257,28 @@ def main():
         cleanup(groups,directories)
 
 if __name__=='__main__':
-    main()
+    #main()
+    #mycat = Category("Machine Learning",["neural network","ai","artifical intelligence","deep learning","nlp","natural language processing","machine learning","data science"])
+    #saveCategories([mycat])
+    #categories = loadCategories()  
+    #for category in categories:
+    #    print(category.dict())
+    #cat = loadCategory('Machine Learning')
+    #print(cat.dict())
+    #ml = 'Machine Learning'
+    #electronics = 'Electronics'
+    #cts = [ml,electronics]
+    #for c in cts:
+    #    print(f'{c} category exists: ',categoryExists(c))
+
+    #newcat = Category('Electronics',['electronics','raspberry pi','arduino','raspberry','electricity','circuits'])
+    #newcat.save()
+
+    cat = loadCategory('Electronics')
+    cat.add_keyword('robot')
+    cat.add_keyword('sensors')
+    cat.add_keyword('circuit board')
+    cat.add_keyword('wiring diagram')
+    cat.add_keyword('pi zero')
+    cat.save()
+    
