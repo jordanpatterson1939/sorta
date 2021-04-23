@@ -41,13 +41,12 @@ $ sorta -d /path/to/directory -c
 ```
 
 ### Allow sorta to run at intervals
-**Note: In order to run Sorta in the background, you'll have to run a daemon command or your system's equivalent with Sorta along with the specified arguments(see below) as the process).**
+**Note: In order to run Sorta in the background, you'll have to run a daemon command or your system's equivalent with Sorta along with the specified arguments(see below) as the process.**
 Here is an example of running Sorta indefinitely, allowing it to clean up your directories periodically every 15 minutes. You can stop this by pressing Ctrl+c.
 ```bash
 $ sorta -b -i 15
 ```
 
-<br>
 <br>
 
 ## Command Line Arguments
