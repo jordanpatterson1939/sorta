@@ -28,7 +28,12 @@ class Category:
 
     def match(self,filename):
         #returns bool indicating whether or not a keyword is present in filename
-        pass
+        for kw in self.keywords:
+            regex = re.compile(kw,re.IGNORECASE)
+            res = regex.search(filename)
+            if res is not None:
+                return True
+        return False
 
     def haskeyword(self,keyword):
         return keyword in self.keywords
@@ -40,13 +45,20 @@ class Category:
         with open(path,'r') as inp:
             cats = json.load(inp)
         cats[self.name] = self.dict()
-        saveCategories(cats)
+        save_categories(cats)
 
     def addfile(self,filename,parent_dir):
-        pass
+        source_dir = os.path.join(parent_dir,filename)
+        target = os.path.join(parent_dir,self.name)
+        destination = os.path.join(target,filename)
+        #make category directory if it doesn't exist
+        if not os.path.exists(target):
+            os.mkdir(target)
+        #move file
+        shutil.move(source_dir,destination)
 
-def loadCategory(name):
-    if not categoryExists(name):
+def load_category(name):
+    if not category_exists(name):
         print("Attempt to retrieve category has failed. ERROR: Category does not exist. Aborting...")
         exit(1)
     home_dir = os.path.expanduser('~')
@@ -57,7 +69,7 @@ def loadCategory(name):
     obj = Category(cat['name'],cat['keywords'])
     return obj
 
-def categoryExists(name):
+def category_exists(name):
     home_dir = os.path.expanduser('~')
     filename = 'categories.json'
     path = os.path.join(home_dir,filename)
@@ -66,7 +78,7 @@ def categoryExists(name):
     return name in cats
     
 
-def loadCategories():
+def load_categories():
     home_dir = os.path.expanduser('~')
     filename = 'categories.json'
     try:
@@ -84,7 +96,7 @@ def loadCategories():
     except Exeception as e:
         print(e)
 
-def saveCategories(categories):
+def save_categories(categories):
     home_dir = os.path.expanduser('~')
     filename = 'categories.json'
     try:
@@ -114,12 +126,12 @@ def create_new_category():
     if name=='':
         print("\nNo category name entered. Aborting.")
         exit(1)
-    elif categoryExists(name):
-        category = loadCategory(name)
+    elif category_exists(name):
+        category = load_category(name)
     else:
         category = Category(name)
     while True:
-        print("\nEnter a keyword/phrase associated with this category: ",end='')
+        print("\nEnter a keyword/phrase associated with this category. \nThe more descriptive the better ;)  ",end='')
         kw = input()
         if kw=='':
             print("Keyword empty. Try typing something thats related to the category. ")
@@ -213,6 +225,17 @@ def cleanup(groups,directories):
                 destination = os.path.join(target_folder,f)
                 shutil.move(source,destination)
 
+
+def cleanup_by_category(categories,directories):
+    for d in directories:
+        files = getfiles(d)
+        for f in files:
+            for c in categories:
+                if c.match(f):
+                    c.addfile(f,d)
+                    break
+                    
+
 def main():
     document_types = []
     picture_types = []
@@ -256,7 +279,7 @@ def main():
     groups = [document_group, picture_group, audio_group,video_group,coding_group]
     directories = [downloads,desktop,documents]    
     
-    parser = argparse.ArgumentParser(description="Sorta, organize your filesystem.")
+    parser = argparse.ArgumentParser(description="Sorta, organize your filesystem. Running sorta without arguments organizes your files in (documents,desktop, and downloads) by their filetype.")
     parser.add_argument("-b","--background",help="Runs sorta indefinitely.",action="store_true")
     parser.add_argument("-d","--directory",help="The directory you want to run sorta on.",metavar='')
     parser.add_argument("-i","--interval",type=int,help="How frequently you want sorta to run, in minutes.",metavar='')
@@ -301,19 +324,26 @@ def main():
         directories=[args.directory]
         if args.category:
             print(f'Organizing your files in {args.directory} by category.')
+            categories = load_categories()
+            cleanup_by_category(categories,directories)
         else:
             print(f'Organizing your files in {args.directory} by default attribute - filetype.')
-            #cleanup(groups,directories)
+            cleanup(groups,directories)
 
     elif args.addcategory:
-        print("Adding or updating existing categegory.")
+        create_new_category()
     else:
         if args.category:
             print("Organizing your files in (documents,desktop,downloads) by category.")
+            categories = load_categories()
+            cleanup_by_category(categories,directories)
         else:
             print("Organizing your files in (documents,desktop,downloads) by default attribue - filetype.")
-            #cleanup(groups,directories)
+            cleanup(groups,directories)
 
 if __name__=='__main__':
     main()
+            
+            
+    
     
