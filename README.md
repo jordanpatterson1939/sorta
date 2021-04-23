@@ -11,14 +11,14 @@ $ pip install sorta
 ```
 <br>
 
-### Usage
-**Basic (Organizes your Desktop, Documents and Download directories)**
+### Basic Usage
+**Organizes files in your (documents,desktop, and downloads directories) by their filetypes.**
 ```bash
 $ sorta
 ```
 <br>
 
-**Clean up a single specified directory. By default, sorta groups files by their filetype, but can also group files by their category(see below).**
+**Organize files in a single specified directory by their filetype.**
 ```bash
 $ sorta -d /path/to/directory
 ```
