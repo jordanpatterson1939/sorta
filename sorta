@@ -284,7 +284,7 @@ def main():
     parser.add_argument("-d","--directory",help="The directory you want to run sorta on.",metavar='')
     parser.add_argument("-i","--interval",type=int,help="How frequently you want sorta to run, in minutes.",metavar='')
     parser.add_argument("-c","--category",help="Sort files by category.",action="store_true")
-    parser.add_argument("-ac","--addcategory",help="Add or update existing category to group files by.",action="store_true")
+    parser.add_argument("-ac","--addcategory",help="Add or update an existing category to group files by.",action="store_true")
     args = parser.parse_args()
 
     if args.background:
