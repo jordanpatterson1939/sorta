@@ -297,8 +297,7 @@ def main():
         else:
             print("Interval not set. Using default {0} minutes.".format(interval))
 
-        if not args.directory:
-            path=input("Enter directory: ")
+        if args.directory:
             if not os.path.exists(path):
                 print("That path does not exists. Aborting.")
                 exit(1)
