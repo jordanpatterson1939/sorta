@@ -18,20 +18,20 @@ $ sorta
 ```
 <br>
 
-**Clean up a single specified directory. By default, sorta groups files by their filetype, but can group files by their category(see below).**
+**Clean up a single specified directory. By default, sorta groups files by their filetype, but can also group files by their category(see below).**
 ```bash
 $ sorta -d /path/to/directory
 ```
 <br>
 
 ### By category
-By default, sorta groups your files by their filetype. You can choose to organize them by categories by using the command line flags '-c' or '--category'. You will have to create your own categories by using the '-ac' or '--addcategory' flags. These categories contain keywords or phrases that you would specifiy. It is best to make each keyword/key phrase as descriptive as possible. If a keyword/phrase was found in a filename, the file will be moved to the corresponding category folder.
+By default, sorta groups your files by their filetype. You can also choose to organize them by categories by using the command line flags '-c' or '--category'. You will have to create your own categories by using the '-ac' or '--addcategory' flags when sorta is first installed. These categories contain keywords or phrases that you would specify (it is best to make them as descriptive as possible so that Sorta can make the correct assignments). If a keyword/phrase was found in a filename, the file will be moved to the corresponding category's folder. 
+**Note:** Files that did not match any categories will be ignored.
 
 **Organize your files in (documents,desktop and downloads) by category. **
 ```bash
 $ sorta -c
 ```
-
 <br>
 
 **Organize your files in a specific directory by category.**
